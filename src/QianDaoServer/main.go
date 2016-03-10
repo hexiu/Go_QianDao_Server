@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	orm.Debug = true
+	orm.Debug = false
 	o := orm.NewOrm()
 	o.Using("default")
 	orm.RunSyncdb("default", false, true)
@@ -22,6 +22,7 @@ func main() {
 	beego.Router("/logs", &controllers.LogsController{})
 	beego.Router("/add", &controllers.AddController{})
 	beego.Router("/error", &controllers.ErrorController{})
-
+	// beego.Router("/downloads", &controllers.DownloadsController{})
+	beego.SetStaticPath("/downloads", "downloads")
 	beego.Run()
 }

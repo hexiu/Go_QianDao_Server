@@ -1,15 +1,19 @@
 package models
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
 )
 
 const (
-	_MYSQL_DRIVER         = "mysql"
-	_LEAST_TIME   float64 = 300.0
+	_MYSQL_DRIVER            = "mysql"
+	_LEAST_TIME      float64 = 300.0
+	_DATABASE_UNAME          = "root"
+//	_DATABASE_PASSWD         = "zypc2016"
+		_DATABASE_PASSWD         = "axiu"
+	_DATABASE_NAME = "QianDao"
 )
 
 type User struct {
@@ -40,7 +44,8 @@ func RegisterDB() {
 	//注册模型
 	orm.RegisterModel(new(User), new(Daylog), new(Logs))
 	orm.RegisterDriver(_MYSQL_DRIVER, orm.DRMySQL)
-	orm.RegisterDataBase("default", _MYSQL_DRIVER, "root:axiu@/QianDao?charset=utf8&loc=Asia%2FShanghai")
+	orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
+	//	orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
 }
 
 func GetUser(mac string) bool {
@@ -161,14 +166,9 @@ func AddLogs(mac string) error {
 	logs := &Logs{
 		Mac:   mac,
 		Date:  Today(),
-		Start: time.Now().Add(8),
-		End:   time.Now().Add(8),
+		Start: time.Now(),
+		End:   time.Now(),
 	}
-	fmt.Println(time.Now())
-	fmt.Println(time.Now())
-	fmt.Println(time.Now())
-	fmt.Println(time.Now())
-	fmt.Println(time.Now())
 	_, err := o.Insert(logs)
 	if err != nil {
 		return err
@@ -192,10 +192,10 @@ func UpdateLogs(mac string) error {
 			return nil
 		} else {
 			lastEnd := logss[0].End
-			fmt.Println(lastEnd)
-			fmt.Println(time.Now().Sub(lastEnd).Seconds())
+			// fmt.Println(lastEnd)
+			// fmt.Println(time.Now().Sub(lastEnd).Seconds())
 			jud := time.Now().Sub(lastEnd).Seconds() > _LEAST_TIME
-			fmt.Println(jud)
+			// fmt.Println(jud)
 			if jud {
 				AddLogs(mac)
 			} else {
