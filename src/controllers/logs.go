@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"QianDaoServer/models"
+	"models"
 	"fmt"
 	"github.com/astaxie/beego"
 	"strconv"

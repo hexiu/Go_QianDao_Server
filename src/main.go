@@ -1,8 +1,8 @@
 package main
 
 import (
-	"QianDaoServer/controllers"
-	"QianDaoServer/models"
+	"controllers"
+	"models"
 	// "QianDaoServer/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

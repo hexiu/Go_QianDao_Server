@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"strconv"
 	"time"
+
 )
 
 //一些静态变量值，后期写入配置文件
@@ -255,12 +256,26 @@ func Today() string {
 	return today
 }
 
-/*
-func DeleteUser(uid, mac string) {
-	o := orm.NewOrm()
-	user := new(User)
-	qs := o.QueryTable("user")
-	qs.Filter()
 
+//删除用户，如果删除成功返回True，否则返回False
+func DeleteUser(uid, mac string) bool {
+	o := orm.NewOrm()
+	user :=&User{
+		Uid:uid,
+		Mac:mac,
+	}
+	if o.Read(user) == nil {
+		_,err :=o.Delete(user)
+		if err ==nil {
+			return true
+		}else {
+			return false
+		}
+
+	} else {
+		return false
+	}
 }
-*/
+
+
+
