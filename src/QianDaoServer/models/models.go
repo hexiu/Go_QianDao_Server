@@ -13,9 +13,9 @@ import (
 const (
 	_MYSQL_DRIVER           = "mysql"
 	_LEAST_TIME     float64 = 300.0
-	_DATABASE_UNAME         = "root"
-	//	_DATABASE_PASSWD         = "zypc2016"
-	_DATABASE_PASSWD = "axiu"
+	_DATABASE_UNAME         = "xxxx"
+	//	_DATABASE_PASSWD         = "xxxxxxx"
+	_DATABASE_PASSWD = "xxxxxxx"
 	_DATABASE_NAME   = "QianDao"
 )
 
