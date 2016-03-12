@@ -13,7 +13,7 @@ import (
 const (
 	_MYSQL_DRIVER           = "mysql"
 	_LEAST_TIME     float64 = 300.0
-	_DATABASE_UNAME         = "xxxx"
+	_DATABASE_UNAME         = "xxxxx"
 	//	_DATABASE_PASSWD         = "xxxxxxx"
 	_DATABASE_PASSWD = "xxxxxxx"
 	_DATABASE_NAME   = "QianDao"
@@ -76,12 +76,14 @@ func GetAllUser() ([]*User, error) {
 	users := make([]*User, 0)
 	qs := o.QueryTable("user")
 	_, err := qs.All(&users)
+	fmt.Println(users[0])
 	return users, err
 }
 
 //添加用户信息到数据库（实则更新，只要收到客户端信息，服务器便会插入数据，防止遗漏数据）
 // 只有安装客户端之后，才可以添加用户信息
 func AddUsers(mac, cid, name string) error {
+	fmt.Println(mac, cid, name)
 	uid, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
@@ -156,7 +158,7 @@ func UpdateUser(mac string) error {
 			return err
 		}
 	} else {
-		err = AddUsers(mac, "123", "")
+		err = AddUsers(mac, "0", "")
 		if err != nil {
 			return err
 
@@ -332,7 +334,7 @@ func TimeOut() bool {
 
 	now, _ := strconv.ParseInt(time.Now().String()[11:13], 10, 64)
 	if now >= 23 || now <= 6 {
-		return false
+		return true
 	}
-	return true
+	return false
 }
