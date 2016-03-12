@@ -1,0 +1,51 @@
+{{template "header" .}}
+<title>签到 - 用户列表</title>
+</head>
+
+<body>
+<div class="navbar navbar-default navbar-fixed-top">{{template "navbar" .}}</div>
+
+<br>
+<br>
+
+<div class="container">
+    <h1>用户列表</h1>
+    <form method="GET" action="/category">
+        <div class="form-group">
+            <label>用户名称</label>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>名称</th>
+                    <th>文章数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Users}}
+                <tr>
+                    <th>{{.Id}}</th>
+                    <th>{{.Uid}}</th>
+                    <th>{{.Name}}</th>
+                    <th>{{.Mac}}</th>
+                    <th>{{.AllTime}}</th>
+                    <th>
+                        <a href="/userlist?op=del&Uid={{.Uid}}&Mac={{.Mac}}">删除</a>
+                    </th>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </form>
+
+</div>
+
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+
+<!-- <script type="text/javascript" src=""></script>
+-->
+</body>
+</html>

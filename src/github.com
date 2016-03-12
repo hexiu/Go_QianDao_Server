@@ -1,0 +1,1 @@
+/mnt/golang/go_projects/src/github.com
