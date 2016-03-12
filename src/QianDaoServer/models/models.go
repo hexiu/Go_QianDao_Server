@@ -3,8 +3,12 @@ package models
 
 import (
 	"fmt"
+	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql"
+	//	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
+	"os"
+	"path"
 	"strconv"
 	"time"
 )
@@ -17,6 +21,9 @@ const (
 	//	_DATABASE_PASSWD         = "xxxxxxx"
 	_DATABASE_PASSWD = "xxxxxxx"
 	_DATABASE_NAME   = "QianDao"
+
+	_DB_NAME        = "data/beeqiandao.db"
+	_SQLITE3_DRIVER = "sqlite3"
 )
 
 //用户信息表单
@@ -48,11 +55,22 @@ type Logs struct {
 //注册数据库
 func RegisterDB() {
 
-	//注册模型
+	if !com.IsExist(_DB_NAME) {
+		os.MkdirAll(path.Dir(_DB_NAME), os.ModePerm)
+		os.Create(_DB_NAME)
+	}
 	orm.RegisterModel(new(User), new(Daylog), new(Logs))
-	orm.RegisterDriver(_MYSQL_DRIVER, orm.DRMySQL)
-	orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
-	//	orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
+	orm.RegisterDriver(_SQLITE3_DRIVER, orm.DRSqlite)
+	orm.RegisterDataBase("default", _SQLITE3_DRIVER, _DB_NAME, 10)
+	// 	MySql版本
+	/*
+		//注册模型
+		orm.RegisterModel(new(User), new(Daylog), new(Logs))
+		orm.RegisterDriver(_MYSQL_DRIVER, orm.DRMySQL)
+		orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
+		//	orm.RegisterDataBase("default", _MYSQL_DRIVER, _DATABASE_UNAME+":"+_DATABASE_PASSWD+"@"+"/"+_DATABASE_NAME+"?charset=utf8&loc=Asia%2FShanghai")
+
+	*/
 }
 
 //获取User，判断用户是否存在
