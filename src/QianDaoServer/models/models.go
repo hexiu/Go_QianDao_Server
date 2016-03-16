@@ -106,7 +106,7 @@ func AddUsers(mac, cid, name string) error {
 	if err != nil {
 		return err
 	}
-
+	// orm.DefaultTimeLoc = time.Local
 	o := orm.NewOrm()
 	user := new(User)
 	qs := o.QueryTable("user")
@@ -209,6 +209,7 @@ func UpdateDayLog(mac, today string) error {
 	if TimeOut() {
 		return nil
 	}
+	// orm.DefaultTimeLoc = time.Local
 	o := orm.NewOrm()
 	daylog := new(Daylog)
 	qs := o.QueryTable("daylog")
@@ -255,8 +256,9 @@ func UpdateLogs(mac string) error {
 	if TimeOut() {
 		return nil
 	}
+	orm.DefaultTimeLoc = time.Local
 	o := orm.NewOrm()
-	logs := new(Logs)
+	// logs := new(Logs)
 	qs := o.QueryTable("logs")
 
 	jud, _ := qs.Filter("mac", mac).Count()
@@ -265,27 +267,52 @@ func UpdateLogs(mac string) error {
 		//之前存在记录
 		logss := make([]*Logs, 0)
 		qs.Filter("mac", mac).OrderBy("-End").All(&logss)
+		// fmt.Println(logss)
 		if len(logss) == 0 {
 			return nil
 		} else {
-			lastEnd := logss[0].End
-			// fmt.Println(lastEnd)
+
+			// lastend := logss[0].End
+			lastEnd := logss[0].End.Local()
+			// fmt.Println(lastEnd, "======================", lastend, time.Now().UTC())
+
 			// fmt.Println(time.Now().Sub(lastEnd).Seconds())
 			jud := time.Now().Sub(lastEnd).Seconds() > _LEAST_TIME
-			// fmt.Println(jud)
+			// fmt.Println(jud, lastend.String()[0:30]+"+0000"+" UTC")
 			if jud {
 				AddLogs(mac)
 			} else {
-				err := qs.Filter("mac", mac).Filter("End", lastEnd).One(logs)
-				if err == nil {
-					logs.End = time.Now()
-					_, err := o.Update(logs)
-					if err != nil {
-						return err
-					}
-				} else {
+
+				//			err := qs.Filter("mac", mac).Filter("end", lastend.String()[0:29]+"00:00").One(logs)
+				/*				logs = &Logs{End: lastend}
+								if o.Read(logs) == nil {
+									fmt.Println(logs)
+									logs.End = time.Now()
+								} else {
+									fmt.Println(logs)
+
+								}
+								_, err := o.Update(logs)
+								if err != nil {
+									return err
+								}
+				*/
+				// a := 25
+				//err := qs.Filter("mac", mac).Filter("id", a).One(logs)
+				// err := qs.Filter("End", lastend).One(logs)
+				// err := qs.Filter("mac", mac).One(logs)
+				// fmt.Println(lastend, err.Error())
+				// fmt.Println(logs)
+				// fmt.Println(logss[0], "#######################")
+
+				// fmt.Println(lastend)
+				logss[0].End = time.Now()
+				// fmt.Println(logss[0].End)
+				_, err := o.Update(logss[0])
+				if err != nil {
 					return err
 				}
+
 			}
 		}
 
